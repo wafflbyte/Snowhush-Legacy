@@ -196,7 +196,7 @@ final class Renderer: NSObject, MTKViewDelegate {
         clear(view)
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.handBack) { [weak self, weak view] in
             guard let self, let view, view.drawableSize == Self.released else { return }
-            clear(view)
+            self.clear(view)
         }
     }
 
@@ -252,10 +252,15 @@ final class Renderer: NSObject, MTKViewDelegate {
         let fastest = budget == .full ? interactiveFrameRate : min(60, interactiveFrameRate)
         // 24 only where it divides the display's rate evenly; elsewhere it would judder.
         let calm = budget == .saver && interactiveFrameRate % 24 == 0 ? 24 : 30
-        let frameRate = switch simulation.pace {
-        case .calm: calm
-        case .lively: min(60, fastest)
-        case .interactive: fastest
+        // Compatibility for Swift 5.7
+        let frameRate: Int
+        switch simulation.pace {
+        case .calm:
+            frameRate = calm
+        case .lively:
+            frameRate = min(60, fastest)
+        case .interactive:
+            frameRate = fastest
         }
         let pace = maxFrameRate ? interactiveFrameRate : lanternMoved ? max(frameRate, min(60, fastest)) : frameRate
         if view.preferredFramesPerSecond != pace { view.preferredFramesPerSecond = pace }

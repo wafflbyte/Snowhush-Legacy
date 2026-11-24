@@ -34,8 +34,8 @@ final class WelcomeController: NSObject {
         window.contentView = content
         window.center()
         self.window = window
-
-        NSApp.activate()
+        // Use the legacy AppKit activation API for macOS 12.
+        NSApp.activate(ignoringOtherApps: true)
         window.makeKeyAndOrderFront(nil)
     }
 
@@ -251,7 +251,7 @@ private final class WelcomeView: NSView {
         let title = NSTextField(labelWithAttributedString: NSAttributedString(
             string: "IT'S SNOWING\nON YOUR DESKTOP.",
             attributes: [
-                .font: NSFont.systemFont(ofSize: 34, weight: .light, width: .condensed),
+                .font: NSFont.systemFont(ofSize: 34, weight: .light),
                 .foregroundColor: ink,
                 .kern: 0.6,
                 .paragraphStyle: Self.paragraph(lineHeight: 0.95),
