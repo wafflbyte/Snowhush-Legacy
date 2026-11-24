@@ -350,13 +350,16 @@ final class ScreenSnow {
     /// coming back, to bring the snow in with it; drawn again, the snow keeps watching each frame.
     private func startLookout() -> Timer {
         let timer = Timer(timeInterval: 0.25, repeats: true) { [weak self] _ in
-            guard let self, covered, !leaving, !asleep else { return }
-            if tracker.missionControlShows(now: CACurrentMediaTime()) {
-                checkCovered()
-                activityChanged()
+            guard let self, self.covered, !self.leaving, !self.asleep else { return }
+            if self.tracker.missionControlShows(now: CACurrentMediaTime()) {
+                self.checkCovered()
+                self.activityChanged()
                 return
             }
-            if let shown = tracker.desktopShare(now: CACurrentMediaTime()), shown > 0 { setLeaving(true) }
+
+            if let shown = self.tracker.desktopShare(now: CACurrentMediaTime()), shown > 0 {
+                self.setLeaving(true)
+            }
         }
         timer.tolerance = 0.05
         RunLoop.main.add(timer, forMode: .common)
@@ -390,14 +393,16 @@ final class ScreenSnow {
     /// outright, and under a full-screen app the snow is put to rest.
     private func finishFade() {
         DispatchQueue.main.asyncAfter(deadline: .now() + max(0, fadeEndsAt - CACurrentMediaTime()) + 0.02) { [weak self] in
-            guard let self, !following, let target = alphaTarget, CACurrentMediaTime() >= fadeEndsAt else { return }
-            if window.alphaValue != target || dock.window.alphaValue != target {
-                window.alphaValue = target
-                dock.window.alphaValue = target
-            }
-            guard covered, !leaving, !gone, target == 0 else { return }
-            gone = true
-            activityChanged()
+            guard let self, !self.following, let target = self.alphaTarget, CACurrentMediaTime() >= self.fadeEndsAt else { return }
+
+        if self.window.alphaValue != target || self.dock.window.alphaValue != target {
+            self.window.alphaValue = target
+            self.dock.window.alphaValue = target
+        }
+
+        guard self.covered, !self.leaving, !self.gone, target == 0 else { return }
+        self.gone = true
+        self.activityChanged()
         }
     }
 

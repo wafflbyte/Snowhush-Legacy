@@ -31,13 +31,13 @@ final class ScreenshotWatch {
         }
         let source = DispatchSource.makeProcessSource(identifier: pid, eventMask: [.fork, .exit], queue: .main)
         source.setEventHandler { [weak self] in
-            guard let self, let server else { return }
+            guard let self, let server = self.server else { return }
             if server.data.contains(.exit) {
                 server.cancel()
                 self.server = nil
-                retry()
+                self.retry()
             } else {
-                forked(from: pid)
+                self.forked(from: pid)
             }
         }
         source.resume()

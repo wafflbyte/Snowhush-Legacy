@@ -410,12 +410,10 @@ final class Renderer: NSObject, MTKViewDelegate {
         guard piles.isEmpty else { return }
         // The strip shrank to a line; its larger frames go only once another is handed out.
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.handBack) { [weak self] in
-            guard let self, !dockDrawn, let commandBuffer = queue.makeCommandBuffer() else { return }
-            clearDock(into: commandBuffer)
-            commandBuffer.commit()
+            guard let self, !self.dockDrawn, let commandBuffer = self.queue.makeCommandBuffer() else { return }
+            self.clearDock(into: commandBuffer)
         }
     }
-
     private func drawPiles(_ piles: [PileLayer], with encoder: MTLRenderCommandEncoder, uniforms: Uniforms, heights: MTLBuffer) {
         guard !piles.isEmpty else { return }
         var uniforms = uniforms

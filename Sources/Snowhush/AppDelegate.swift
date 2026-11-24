@@ -120,7 +120,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUSta
         welcome.scatter = { [weak self] pieces in
             guard let self, let first = pieces.first else { return }
             let point = CGPoint(x: CGFloat(first.position.x), y: CGFloat(first.position.y))
-            guard let snow = screens.first(where: { $0.window.frame.contains(point) }) ?? screens.first else { return }
+            guard let snow = self.screens.first(where: { $0.window.frame.contains(point) }) ?? self.screens.first else { return }
             let origin = SIMD2(Float(snow.window.frame.minX), Float(snow.window.frame.minY))
             snow.simulation.scatter(pieces.map { piece in
                 var local = piece
@@ -146,7 +146,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUSta
         menu.delegate = self
         menu.autoenablesItems = false
 
-        menu.addItem(.sectionHeader(title: tr("intensity")))
+        menu.addItem(.legacySectionHeader(title: tr("intensity")))
         intensitySlider.changed = { [unowned self] in select(intensity: $0) }
         let intensityItem = NSMenuItem()
         intensityItem.view = intensitySlider
@@ -196,17 +196,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUSta
         menu.addItem(.separator())
         let settings = NSMenu()
         settings.autoenablesItems = false
-        settings.addItem(.sectionHeader(title: tr("behavior")))
+        settings.addItem(.legacySectionHeader(title: tr("behavior")))
         meltItem = toggle(tr("melt.snow"), #selector(toggleMeltSnow), to: settings)
         deepInteractionItem = toggle(tr("deep"), #selector(toggleDeepInteraction), to: settings)
         settings.addItem(.separator())
-        settings.addItem(.sectionHeader(title: tr("display")))
+        settings.addItem(.legacySectionHeader(title: tr("display")))
         behindWindowsItem = toggle(tr("behind"), #selector(toggleBehindWindows), to: settings)
         fullScreenItem = toggle(tr("full_screen"), #selector(toggleFullScreen), to: settings)
         screenshotsItem = toggle(tr("screenshots"), #selector(toggleScreenshots), to: settings)
         maxPerformanceItem = toggle(tr("performance"), #selector(toggleMaxPerformance), to: settings)
         settings.addItem(.separator())
-        settings.addItem(.sectionHeader(title: tr("general")))
+        settings.addItem(.legacySectionHeader(title: tr("general")))
         loginItem = toggle(tr("login"), #selector(toggleOpenAtLogin), to: settings)
         let updates = settings.addItem(withTitle: tr("updates"), action: #selector(SPUStandardUpdaterController.checkForUpdates(_:)), keyEquivalent: "")
         updates.target = updater
@@ -484,5 +484,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUSta
             snow.occlusionChanged()
             snow.setActive(awake && !snow.givesWay && (snow.window.occlusionState.contains(.visible) || snow.fading), asleep: !awake)
         }
+    }
+}
+
+// Compatibility replacement for newer AppKit section headers.
+extension NSMenuItem {
+    static func legacySectionHeader(title: String) -> NSMenuItem {
+        let item = NSMenuItem(
+            title: title,
+            action: nil,
+            keyEquivalent: ""
+        )
+        item.isEnabled = false
+        return item
     }
 }

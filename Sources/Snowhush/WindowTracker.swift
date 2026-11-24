@@ -239,7 +239,7 @@ final class WindowTracker {
     private func probe(_ watched: (id: CGWindowID, frame: CGRect)) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.006) { [weak self] in
             guard let self, let bounds = Self.listedBounds(of: watched.id) else { return }
-            glide.noteMovedSoon(abs(bounds.minX - screen.minX - watched.frame.minX) > 0.5)
+            self.glide.noteMovedSoon(abs(bounds.minX - self.screen.minX - watched.frame.minX) > 0.5)
         }
     }
 
