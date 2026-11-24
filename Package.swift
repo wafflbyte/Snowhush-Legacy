@@ -1,9 +1,9 @@
-// swift-tools-version:5.9
+// swift-tools-version:5.7
 import PackageDescription
 
 let package = Package(
     name: "Snowhush",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v12)],
     dependencies: [
         .package(url: "https://github.com/sparkle-project/Sparkle", exact: "2.10.0"),
     ],
