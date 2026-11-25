@@ -6,3 +6,4 @@ dist/
 windows/target/
 core/target/
 site-engine/target/
+build.log
