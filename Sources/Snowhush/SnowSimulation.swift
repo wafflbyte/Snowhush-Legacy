@@ -877,7 +877,9 @@ final class SnowSimulation {
             count += 1
             if !drop.hanging {
                 let speed = simd_length(sprite.velocity)
-                let reach = max(sprite.size, 1.5) * 1.1 + min(speed * 0.08, sprite.size * 0.9) + speed * 0.024 + 1
+                let size: Float = sprite.size
+                let streak: Float = min(speed * 0.08, size * 0.9)
+                let reach: Float = max(size, 1.5) * 1.1 + streak + speed * 0.024 + 1
                 let bounds = SIMD4(lowHalf: sprite.position - reach, highHalf: sprite.position + reach)
                 glassReach = glassReach.map { SIMD4(lowHalf: simd_min($0.lowHalf, bounds.lowHalf), highHalf: simd_max($0.highHalf, bounds.highHalf)) } ?? bounds
             }

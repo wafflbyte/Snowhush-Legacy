@@ -461,35 +461,46 @@ final class SnowLayer {
     func writeSmoothed(into buffer: UnsafeMutablePointer<Float>) {
         let count = heights.count
         if makeup.count != Self.rows * count { makeup = Array(repeating: 0, count: Self.rows * count) }
-        var empty = true
+        let empty = makeup.withUnsafeMutableBufferPointer { fillMakeup($0, count: count) }
         makeup.withUnsafeMutableBufferPointer { m in
-            let surfaces = m.baseAddress!, beds = surfaces + count, shares = beds + count, kinds = shares + count
-            for i in 0..<count {
-                let l = max(i - 1, 0), r = min(i + 1, count - 1)
-                let height = 0.25 * heights[l] + 0.5 * heights[i] + 0.25 * heights[r]
-                let leafy = 0.25 * leaves[l] + 0.5 * leaves[i] + 0.25 * leaves[r]
-                let petal = 0.25 * petals[l] + 0.5 * petals[i] + 0.25 * petals[r]
-                surfaces[i] = bed[i] + height
-                beds[i] = bed[i]
-                shares[i] = height > 0 ? min(leafy / height, 1) : -1
-                kinds[i] = leafy > 0 ? min(petal / leafy, 1) : 0
-                if height > 0 { empty = false }
-            }
-            // A bare column takes its neighbour's makeup, or the shader would blend a heap's end with snow that isn't there.
-            if empty {
-                for i in 0..<count { shares[i] = 0 }
-            } else {
-                for i in 1..<max(count, 1) where shares[i] < 0 && shares[i - 1] >= 0 {
-                    shares[i] = shares[i - 1]
-                    kinds[i] = kinds[i - 1]
-                }
-                for i in stride(from: count - 2, through: 0, by: -1) where shares[i] < 0 {
-                    shares[i] = shares[i + 1]
-                    kinds[i] = kinds[i + 1]
-                }
-            }
+            fillBareColumns(m, count: count, empty: empty)
             // The buffer is write-combined for the GPU: read back it is uncached, and only written in order is it fast.
-            buffer.update(from: surfaces, count: Self.rows * count)
+            buffer.assign(from: m.baseAddress!, count: Self.rows * count)
+        }
+    }
+
+    /// The smoothed surface above the bed, the bed, the leaves' share and the petals' share, in that order.
+    private func fillMakeup(_ m: UnsafeMutableBufferPointer<Float>, count: Int) -> Bool {
+        let surfaces = m.baseAddress!, beds = surfaces + count, shares = beds + count, kinds = shares + count
+        var empty = true
+        for i in 0..<count {
+            let l = max(i - 1, 0), r = min(i + 1, count - 1)
+            let height = 0.25 * heights[l] + 0.5 * heights[i] + 0.25 * heights[r]
+            let leafy = 0.25 * leaves[l] + 0.5 * leaves[i] + 0.25 * leaves[r]
+            let petal = 0.25 * petals[l] + 0.5 * petals[i] + 0.25 * petals[r]
+            surfaces[i] = bed[i] + height
+            beds[i] = bed[i]
+            shares[i] = height > 0 ? min(leafy / height, 1) : -1
+            kinds[i] = leafy > 0 ? min(petal / leafy, 1) : 0
+            if height > 0 { empty = false }
+        }
+        return empty
+    }
+
+    private func fillBareColumns(_ m: UnsafeMutableBufferPointer<Float>, count: Int, empty: Bool) {
+        let shares = m.baseAddress! + 2 * count, kinds = shares + count
+        // A bare column takes its neighbour's makeup, or the shader would blend a heap's end with snow that isn't there.
+        if empty {
+            for i in 0..<count { shares[i] = 0 }
+        } else {
+            for i in 1..<max(count, 1) where shares[i] < 0 && shares[i - 1] >= 0 {
+                shares[i] = shares[i - 1]
+                kinds[i] = kinds[i - 1]
+            }
+            for i in stride(from: count - 2, through: 0, by: -1) where shares[i] < 0 {
+                shares[i] = shares[i + 1]
+                kinds[i] = kinds[i + 1]
+            }
         }
     }
 
