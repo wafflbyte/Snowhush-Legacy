@@ -8,9 +8,15 @@ let package = Package(
         .package(url: "https://github.com/sparkle-project/Sparkle", exact: "2.10.0"),
     ],
     targets: [
+        // The libproc functions live in libSystem but their header is not part
+        // of Darwin's umbrella module, so expose it to Swift as a small module.
+        .systemLibrary(name: "CLibproc", path: "Sources/CLibproc"),
         .executableTarget(
             name: "Snowhush",
-            dependencies: [.product(name: "Sparkle", package: "Sparkle")],
+            dependencies: [
+                "CLibproc",
+                .product(name: "Sparkle", package: "Sparkle"),
+            ],
             path: "Sources/Snowhush",
             // The per-frame loops reach class properties millions of times a second; Swift's runtime exclusivity
             // checks around each access cost as much as the physics itself.

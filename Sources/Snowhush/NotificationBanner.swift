@@ -1,4 +1,5 @@
 import AppKit
+import CLibproc
 
 /// Notification banners at the top right of the screen. The window list has no window for a banner, only Notification
 /// Center's clear window the size of the screen: it shows as a banner starts to slide in and hides a moment after the

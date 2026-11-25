@@ -1,4 +1,5 @@
 import AppKit
+import CLibproc
 
 /// The screenshot tool, picking a window to capture after ⌘⇧4 and Space or in ⌘⇧5's window mode, takes the window
 /// drawn under the pointer, and to it the overlay, drawn with Metal, is drawn all over: it picks the snow instead of
