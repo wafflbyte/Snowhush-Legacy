@@ -9,7 +9,7 @@ tip, as a share of the furthest, and its colour from the middle out to the edge.
 #   06.jpg  Leaf leaves branch maple autumn nightshot studio.jpg (public domain)
 #
 #     python3 -I scripts/leaves/digitize.py <photos> <out>   # <out>/leaves.json and <out>/sheet.png to check them
-#     python3 -I scripts/leaves/shapes.py <out>/leaves.json > linux/src/shaders/leaves.glsl
+#     python3 -I scripts/leaves/shapes.py <out>/leaves.json > site-engine/shaders/leaves.glsl
 import json
 import math
 import sys

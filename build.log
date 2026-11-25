@@ -1,0 +1,19 @@
+Building for debugging...
+[1/5] Compiling Snowhush DockOverlay.swift
+[2/5] Compiling Snowhush MenuToggle.swift
+[3/5] Emitting module Snowhush
+[4/5] Compiling Snowhush MenuSurfaces.swift
+[5/9] Compiling Snowhush AppDelegate.swift
+[6/9] Compiling Snowhush Displays.swift
+[7/9] Compiling Snowhush Renderer.swift
+[8/11] Compiling Snowhush main.swift
+[9/11] Compiling Snowhush ScreenSnow.swift
+[10/11] Compiling Snowhush SnowSimulation.swift
+[11/17] Compiling Snowhush Text.swift
+[12/17] Compiling Snowhush Halloween.swift
+[13/17] Compiling Snowhush MenuSlider.swift
+[14/17] Compiling Snowhush WelcomeWindow.swift
+[15/17] Compiling Snowhush Preferences.swift
+[16/17] Compiling Snowhush SceneLight.swift
+[16/17] Linking Snowhush
+Build complete! (27.80s)

@@ -474,7 +474,7 @@ fn a_window_dragged_to_the_next_display_takes_its_snow_along() {
     assert_finite(&right);
 }
 
-/// Two displays side by side, each with a simulation of its own, passing snow between them as the Linux app does:
+/// Two displays side by side, each with a simulation of its own, passing snow between them as the apps do:
 /// the left one keeps the snow of window 4, which reaches over onto the right one.
 struct Pair {
     left: SnowSimulation,

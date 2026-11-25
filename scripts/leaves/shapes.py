@@ -2,7 +2,7 @@
 blade's reach at evenly spaced angles from its tip, where its middle and stalk sit in the sprite, the angles of its
 lobes for the veins, and its colours from the middle out to the edge.
 
-    python3 -I scripts/leaves/shapes.py leaves.json glsl petals.json > linux/src/shaders/leaves.glsl
+    python3 -I scripts/leaves/shapes.py leaves.json glsl petals.json > site-engine/shaders/leaves.glsl
     python3 -I scripts/leaves/shapes.py leaves.json hlsl petals.json > windows/src/leaves.hlsl
     python3 -I scripts/leaves/shapes.py leaves.json metal petals.json > Sources/Snowhush/LeafShapes.swift
 

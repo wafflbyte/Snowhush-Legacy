@@ -4,7 +4,7 @@
 ./release.sh 0.2.0 "What changed"
 ```
 
-Bumps the version for all three apps, signs with Developer ID, notarizes, and publishes `Snowhush.dmg`, `appcast.xml` and `Snowhush-Setup.exe` as a GitHub release. The Mac app checks the appcast of the latest release with Sparkle; the Windows app asks GitHub for the latest release and offers its `Snowhush-Setup.exe`. Once the release is published, GitHub Actions adds the Linux packages to it a few minutes later (`.github/workflows/release.yml`).
+Bumps the version for both apps, signs with Developer ID, notarizes, and publishes `Snowhush.dmg`, `appcast.xml` and `Snowhush-Setup.exe` as a GitHub release. The Mac app checks the appcast of the latest release with Sparkle; the Windows app asks GitHub for the latest release and offers its `Snowhush-Setup.exe`.
 
 One-time setup on the release machine:
 
@@ -19,15 +19,9 @@ One-time setup on the release machine:
 
 The site's Windows button leads to the Microsoft Store (product 9P00NQMGBKGP), which signs the package. CI's Windows job packs `Snowhush.msix` (`windows/store/pack.ps1`) and keeps it as the `snowhush-msix` artifact: after a release, take it from the release commit's run and upload it as a new submission in Partner Center. Run from the Store's package, the app leaves updates to the Store.
 
-## Linux
-
-`linux/` is the Linux app in Rust, on the same `core/`, for KDE Plasma 6, Hyprland, Sway and niri on Wayland. Macs can't build it, so GitHub does: `linux/packaging/package.sh` turns the binary built on Ubuntu 22.04 into `Snowhush-x86_64.AppImage`, `snowhush-x86_64.deb`, `snowhush-x86_64.rpm` and `snowhush-linux-x86_64.tar.gz`, the last for the AUR. A release without them, such as one made before, gets them from the workflow's "Run workflow" button with its tag.
-
-After the packages are up, bring the AUR along: `linux/packaging/aur/update.sh <version>` sets the version and checksum in `linux/packaging/aur/PKGBUILD` and writes its `.SRCINFO`; copy both into the clone of `ssh://aur@aur.archlinux.org/snowhush-bin.git`, commit and push.
-
 ## Checks
 
-Every pull request and every push to `main` runs `.github/workflows/ci.yml` on GitHub: formatting and the simulation tests on Linux, the Linux app built on Ubuntu 22.04 and kept as a download for testing, the Windows app built on Windows, and the Mac app built on macOS.
+Every pull request and every push to `main` runs `.github/workflows/ci.yml` on GitHub: formatting and the simulation tests, the Windows app built on Windows, and the Mac app built on macOS.
 
 ## Site
 

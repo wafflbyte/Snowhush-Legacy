@@ -393,7 +393,7 @@ float4 leafAt(float2 p, float seed, float turn, float flip, float alpha, float w
         return flowerAt(p * 2.0, seed, turn, flip, direction, alpha, warm, wither, px * 2.0);
     }
     float2 r = float2(cos(turn) * p.x + sin(turn) * p.y, -sin(turn) * p.x + cos(turn) * p.y) * 2.0;
-    // A pixel in `r`, as the Mac and Linux take it from fwidth, which can't be had in the loop drawing the exposure.
+    // A pixel in `r`, as the Mac takes it from fwidth, which can't be had in the loop drawing the exposure.
     float pixel = max(2.0 * px * (abs(cos(turn)) + abs(sin(turn))), 1e-4);
     [branch] if (petal > 0.5) {
         return curledPetalAt(r, seed, turn, flip, sense, alpha, warm, wither, pixel);

@@ -1,5 +1,5 @@
 /* Snowhush's words, one file per language. The Mac app ships each as <language>.lproj/Localizable.strings;
-   the Windows and Linux apps build them in through snowhush-core. Every file has every key of en.strings. */
+   the Windows app builds them in through snowhush-core. Every file has every key of en.strings. */
 
 "intensity" = "Intensity";
 "opacity" = "Opacity";

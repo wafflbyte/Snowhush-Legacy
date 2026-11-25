@@ -1,6 +1,6 @@
 'use strict';
 
-// The app's own simulation and the Linux app's shaders for Autumn Leaves, Rain and Cherry Blossom, built from
+// The app's own simulation and its shaders for Autumn Leaves, Rain and Cherry Blossom, built from
 // site-engine/ to engine.wasm and loaded the first time one of them is picked. The simulation works in points, y up;
 // the page is y down, so frames and the pointer are flipped on the way in.
 window.SnowhushEngine = (() => {
@@ -113,7 +113,7 @@ window.SnowhushEngine = (() => {
     };
   }
 
-  /// Draws as the Linux app does: the piles from a height texture, every leaf, petal or drop as an instanced quad, and
+  /// Draws the piles from a height texture, every leaf, petal or drop as an instanced quad, and
   /// rain on the glass added up into a field first and drawn from it.
   class Renderer {
     constructor(gl, engine) {

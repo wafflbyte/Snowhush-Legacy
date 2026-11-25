@@ -1,5 +1,5 @@
-//! The app's own simulation for the site's Autumn Leaves, Rain and Cherry Blossom, built to WebAssembly with the Linux
-//! app's shaders: the page hands it the windows and the pointer each frame and reads back the sprites and the piles to
+//! The app's own simulation for the site's Autumn Leaves, Rain and Cherry Blossom, built to WebAssembly with the site's
+//! shaders: the page hands it the windows and the pointer each frame and reads back the sprites and the piles to
 //! draw. Coordinates are the simulation's, y up.
 
 use std::collections::HashSet;
@@ -12,16 +12,16 @@ use snowhush_core::simulation::{Mode, PileLayer, SnowSimulation, Sprite, WindowS
 const PILE: usize = 8 + 16 * 4;
 
 const SHADERS: [&str; 7] = [
-    include_str!("../../linux/src/shaders/sprite.vert"),
-    include_str!("../../linux/src/shaders/sprite.frag"),
-    include_str!("../../linux/src/shaders/pile.vert"),
-    include_str!("../../linux/src/shaders/pile.frag"),
-    include_str!("../../linux/src/shaders/field.frag"),
-    include_str!("../../linux/src/shaders/glass.vert"),
-    include_str!("../../linux/src/shaders/glass.frag"),
+    include_str!("../shaders/sprite.vert"),
+    include_str!("../shaders/sprite.frag"),
+    include_str!("../shaders/pile.vert"),
+    include_str!("../shaders/pile.frag"),
+    include_str!("../shaders/field.frag"),
+    include_str!("../shaders/glass.vert"),
+    include_str!("../shaders/glass.frag"),
 ];
-const DROP: &str = include_str!("../../linux/src/shaders/drop.glsl");
-const LEAVES: &str = include_str!("../../linux/src/shaders/leaves.glsl");
+const DROP: &str = include_str!("../shaders/drop.glsl");
+const LEAVES: &str = include_str!("../shaders/leaves.glsl");
 
 pub struct Engine {
     sim: SnowSimulation,

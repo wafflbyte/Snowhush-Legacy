@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Builds the site's simulation for Autumn Leaves, Rain and Cherry Blossom: the core and the Linux shaders as
+# Builds the site's simulation for Autumn Leaves, Rain and Cherry Blossom: the core and the site's shaders as
 # site/engine.wasm.
 set -e
 cd "$(dirname "$0")"
