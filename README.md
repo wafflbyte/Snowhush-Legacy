@@ -52,6 +52,8 @@ Everything else lives in the menu bar: an Intensity slider for how much falls, O
 
 ## Snowhush Legacy (macOS 12)
 
+Maintained by [wafflbyte](https://github.com/wafflbyte).
+
 This fork's macOS build targets 12.0 and builds with Xcode 14.2 / Swift 5.7.2; it has been run on macOS 12.7.6. A small local module exposes `libproc.h`, the Swift sources stay within 5.7, and Open at Login uses `SMAppService` on macOS 13 or later with a user LaunchAgent plist on Monterey.
 
 The app keeps Sparkle's upstream appcast. Its current release declares macOS 14 as its minimum, so Sparkle skips it on Monterey rather than offering an incompatible update.
