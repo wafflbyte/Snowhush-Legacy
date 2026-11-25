@@ -757,6 +757,14 @@ final class WindowTracker {
     }
 }
 
+/// Swift 5.7 has no `BitwiseCopyable`. These are the plain numbers whose bytes `CFNumberGetValue` may write into
+/// `number`'s result: every call site is one of them.
+private protocol RawNumber: Numeric {}
+extension Int: RawNumber {}
+extension Int32: RawNumber {}
+extension Int64: RawNumber {}
+extension Double: RawNumber {}
+
 /// An entry of the window list, read straight off Core Foundation: bridging the whole list into Swift dictionaries
 /// at every poll costs more than all the rest of the poll.
 private struct ListedWindow {
@@ -801,7 +809,7 @@ private struct ListedWindow {
     }
 
     /// Nil unless the number fits `type` exactly, as a cast from NSNumber would be.
-    private static func number<T: Numeric & BitwiseCopyable>(_ entry: CFDictionary, _ key: CFString, _ type: CFNumberType) -> T? {
+    private static func number<T: RawNumber>(_ entry: CFDictionary, _ key: CFString, _ type: CFNumberType) -> T? {
         guard let value = value(entry, key, CFNumberGetTypeID()) else { return nil }
         var result: T = 0
         let exact = withUnsafeMutableBytes(of: &result) { CFNumberGetValue(unsafeBitCast(value, to: CFNumber.self), type, $0.baseAddress) }
