@@ -287,7 +287,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUSta
         fullScreenItem.state = Preferences.showOverFullScreen ? .on : .off
         fullScreenItem.isEnabled = !behindWindows
         screenshotsItem.state = Preferences.showInScreenshots ? .on : .off
-        loginItem.state = SMAppService.mainApp.status == .enabled ? .on : .off
+        if #available(macOS 13.0, *) {
+            loginItem.state = SMAppService.mainApp.status == .enabled ? .on : .off
+        } else {
+            loginItem.state = Self.loginAgentEnabled ? .on : .off
+        }
     }
 
     private func select(intensity: Double) {
@@ -351,16 +355,54 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUSta
     }
 
     @objc private func toggleOpenAtLogin() {
-        let service = SMAppService.mainApp
         do {
-            if service.status == .enabled {
-                try service.unregister()
+            if #available(macOS 13.0, *) {
+                let service = SMAppService.mainApp
+                if service.status == .enabled {
+                    try service.unregister()
+                } else {
+                    try service.register()
+                }
             } else {
-                try service.register()
+                try Self.setLoginAgent(!Self.loginAgentEnabled)
             }
         } catch {
             NSLog("Snowhush: login item change failed: \(error)")
         }
+    }
+
+    /// Before macOS 13 there is no SMAppService. A user LaunchAgent needs no helper bundle, and launchd loads it
+    /// at the next login just as SMAppService does. The distinct label keeps it apart from the service's own entry.
+    private static let loginAgentLabel = (Bundle.main.bundleIdentifier ?? "com.mbezruchko.Snowhush") + ".loginagent"
+
+    private static var loginAgentURL: URL {
+        let library = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first
+            ?? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library", isDirectory: true)
+        return library.appendingPathComponent("LaunchAgents", isDirectory: true).appendingPathComponent("\(loginAgentLabel).plist")
+    }
+
+    private static var loginAgentEnabled: Bool {
+        FileManager.default.fileExists(atPath: loginAgentURL.path)
+    }
+
+    private static func setLoginAgent(_ enabled: Bool) throws {
+        let url = loginAgentURL
+        guard enabled else {
+            guard FileManager.default.fileExists(atPath: url.path) else { return }
+            try FileManager.default.removeItem(at: url)
+            return
+        }
+        guard let executable = Bundle.main.executableURL?.path else {
+            throw NSError(domain: "Snowhush", code: 1, userInfo: [NSLocalizedDescriptionKey: "Missing executable path for the login agent"])
+        }
+        let plist: [String: Any] = [
+            "Label": loginAgentLabel,
+            "ProgramArguments": [executable],
+            "RunAtLoad": true,
+        ]
+        let data = try PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
+        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try data.write(to: url, options: .atomic)
     }
 
     /// Mixed, a third mode picked takes the place of the one picked before the other.
