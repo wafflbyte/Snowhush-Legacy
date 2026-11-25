@@ -15,7 +15,7 @@
   &nbsp;·&nbsp;
   <a href="https://snowhush.app"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/readme/link-dark.svg"><img src=".github/readme/link-light.svg" width="20" height="16" align="absmiddle" alt=""></picture>snowhush.app</a>
   <br>
-  <sub>macOS 14 or later · Windows 10 or 11 · Linux with KDE Plasma 6, Hyprland, Sway or niri · free, source available</sub>
+  <sub>macOS 12.7.6 (Snowhush Legacy) or 14 or later · Windows 10 or 11 · Linux with KDE Plasma 6, Hyprland, Sway or niri · free, source available</sub>
 </p>
 
 https://github.com/user-attachments/assets/291c3cd5-3563-4b86-8b66-dfd924f980fc
@@ -49,6 +49,12 @@ Choose Mode › Cherry Blossom and pink petals fall instead of snow. Curved like
 From October 30 until dawn on November 1 the snow turns spooky: jack-o'-lanterns glow in the drift and ghosts pop up out of it with signs. Choose Mode › Halloween to have it any other day, as long as snow is falling.
 
 Everything else lives in the menu bar: an Intensity slider for how much falls, Opacity for how see-through it is, a row showing its value that folds out a slider (on Linux and in the plain Windows menu, both are submenus of steps), Accumulate, which folds out a row of icons for what the snow settles on (the ground, the Dock, windows and desktop widgets on the Mac; the ground and windows on Windows; the ground, a floating panel and windows on Linux, as a submenu), Mode (Snow, Autumn Leaves, Rain, Cherry Blossom, and Halloween on top of snow) and Clear Snow, with the rest under Settings: Melt Snow, Deep Interaction (on Windows and the Mac, the snow also settles on a selection dragged across the desktop), Behind Windows, Show over Full Screen, Show in Screenshots, Max Performance (draws every frame at the display's full rate) and Open at Login. On Windows and the Mac, Settings stays open while you switch its options. On Windows, Behind Taskbar lets the snow settle at the bottom of the screen under a see-through taskbar, such as one made clear with TranslucentTB.
+
+## Snowhush Legacy (macOS 12)
+
+This fork's macOS build targets 12.0 and builds with Xcode 14.2 / Swift 5.7.2; it has been run on macOS 12.7.6. A small local module exposes `libproc.h`, the Swift sources stay within 5.7, and Open at Login uses `SMAppService` on macOS 13 or later with a user LaunchAgent plist on Monterey.
+
+The app keeps Sparkle's upstream appcast. Its current release declares macOS 14 as its minimum, so Sparkle skips it on Monterey rather than offering an incompatible update.
 
 ## Building
 
