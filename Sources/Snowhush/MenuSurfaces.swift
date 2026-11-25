@@ -212,10 +212,10 @@ final class SurfacePicker: NSView {
 
     static func name(of surface: Surfaces) -> String {
         switch surface {
-        case .ground: tr("surface.ground")
-        case .dock: tr("surface.dock")
-        case .widgets: tr("surface.widgets")
-        default: tr("surface.windows")
+        case .ground: return tr("surface.ground")
+        case .dock: return tr("surface.dock")
+        case .widgets: return tr("surface.widgets")
+        default: return tr("surface.windows")
         }
     }
 

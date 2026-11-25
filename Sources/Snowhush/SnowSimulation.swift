@@ -3897,8 +3897,8 @@ struct StraySnow {
 
     var position: SIMD2<Float> {
         switch piece {
-        case .flake(let flake): flake.position
-        case .grain(let grain): grain.position
+        case .flake(let flake): return flake.position
+        case .grain(let grain): return grain.position
         }
     }
 }
